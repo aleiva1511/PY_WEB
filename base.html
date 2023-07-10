@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Website</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <!-- Остальные ссылки в шапке -->
+            <a href="{% url 'wishlist' %}">Wishlist</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

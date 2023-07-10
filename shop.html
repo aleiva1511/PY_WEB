@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Shop</h1>
+    {% for product in products %}
+        <div>
+            <h3>{{ product.name }}</h3>
+            <!-- Кнопка добавления в избранное -->
+            <button class="add-to-wishlist" data-product-id="{{ product.id }}">Add to Wishlist</button>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        // Обработчик события для кнопки добавления в избранное
+        $(".add-to-wishlist").click(function() {
+            var productId = $(this).data("product-id");
+            $.ajax({
+                url: "{% url 'add_to_wishlist' %}",
+                method: "POST",
+                data: { product_id: productId },
+                success: function(response) {
+                    alert("Product added to wishlist.");
+                },
+                error: function(xhr, status, error) {
+                    alert("An error occurred. Please try again.");
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+wishlist.html:
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Wishlist</h1>
+    {% if products %}
+        <ul>
+            {% for product in products %}
+                <li>
+                    {{ product.name }}
+                    <!-- Кнопка удаления из избранного -->
+                    <button class="remove-from-wishlist" data-product-id="{{ product.id }}">Remove</button>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Your wishlist is empty.</p>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        // Обработчик события для кнопки удаления из избранного
+        $(".remove-from-wishlist").click(function() {
+            var productId = $(this).data("product-id");
+            $.ajax({
+                url: "{% url 'remove_from_wishlist' %}",
+                method: "POST",
+                data: { product_id: productId },
+                success: function(response) {
+                    alert("Product removed from wishlist.");
+                    location.reload();  // Перезагрузка страницы после удаления товара
+                },
+                error: function(xhr, status, error) {
+                    alert("An error occurred. Please try again.");
+                }
+            });
+        });
+    </script>
+{% endblock %}
